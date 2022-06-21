@@ -21,8 +21,13 @@ const Navbar = () => {
 					</Link>
 				</div>
 				<div className="w-1/3 flex justify-end items-center space-x-6">
-					<span>REGISTER</span>
-					<span>SIGN IN</span>
+					<Link className="text-slate-900" to="/register">
+						<span>REGISTER</span>
+					</Link>
+					<Link className="text-slate-900" to="/login">
+						<span>SIGN IN</span>
+					</Link>
+
 					<div className="-mt-2 cursor-pointer">
 						<Badge size="small" count={5}>
 							<ShoppingOutlined />

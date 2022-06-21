@@ -7,7 +7,6 @@ import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
 function App() {
-	let user = true;
 	return (
 		<div className="App">
 			{/* <Home /> */}
