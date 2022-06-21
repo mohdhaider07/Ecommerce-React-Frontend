@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.slider_wraper{
+    @apply flex h-screen transition-all  duration-1000  items-center w-screen;
+}
+#registerPage{
+    background-image: url("../public/images/registerPage.jpg");
+   width: 100%;
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; 
+}
+#loginPage{
+    background-image: url("../public/images/loginPage.jpg");
+   width: 100%;
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; 
+}
