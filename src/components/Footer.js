@@ -19,17 +19,17 @@ const Footer = () => {
 					Varius duis at consectetur lorem. Fermentum leo vel orci porta
 				</p>
 				<div className="flex items-center space-x-4">
-					<span className="hover:p-4 transition-all duration-500 p-3 text-xl flex bg-blue-700 text-white rounded-full">
+					<span className="hover:text-2xl cursor-pointer  transition-all duration-500 p-3 text-xl flex bg-blue-700 text-white rounded-full">
 						<FacebookFilled />
 					</span>
-					<span className="hover:p-4 transition-all duration-500 p-3 text-xl flex bg-pink-700 text-white rounded-full">
+					<span className="hover:text-2xl cursor-pointer  transition-all duration-500 p-3 text-xl flex bg-pink-700 text-white rounded-full">
 						<InstagramOutlined />
 					</span>
-					<span className="hover:p-4 transition-all duration-500 p-3 text-xl flex bg-blue-400 text-white rounded-full">
+					<span className="hover:text-2xl cursor-pointer  transition-all duration-500 p-3 text-xl flex bg-blue-400 text-white rounded-full">
 						{" "}
 						<TwitterOutlined />
 					</span>
-					<span className="hover:p-4 transition-all duration-500 p-3 text-xl  flex bg-blue-400 text-white rounded-full">
+					<span className="hover:text-2xl cursor-pointer  transition-all duration-500 p-3 text-xl  flex bg-blue-400 text-white rounded-full">
 						{" "}
 						<SkypeOutlined />
 					</span>

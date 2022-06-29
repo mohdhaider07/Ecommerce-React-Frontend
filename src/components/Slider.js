@@ -14,7 +14,7 @@ const Slider = () => {
 		}
 	};
 
-	console.log("index", index);
+	// console.log("index", index);
 	return (
 		<div className="relative   h-screen  overflow-hidden">
 			<div

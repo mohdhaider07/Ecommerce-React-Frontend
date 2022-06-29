@@ -1,9 +1,19 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Announcements from "../components/Announcements";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-
+import { Link } from "react-router-dom";
+import {
+	incrementQuantity,
+	decrementQuantity,
+	remove,
+} from "../redux/cartRedux";
 const Cart = () => {
+	const dispatch = useDispatch();
+	const cart = useSelector((state) => state.cart);
+	const quantity = useSelector((state) => state.cart.quantity);
+
 	return (
 		<div>
 			<Navbar />
@@ -13,16 +23,15 @@ const Cart = () => {
 					<h1 className="text-4xl font-thin">YOUR BAG</h1>
 				</div>
 				<div className="flex p-2 items-center justify-between">
-					<button className="font-semibold border-4 border-slate-800 p-2 ">
-						{" "}
-						CONTINUE SHIPPING
-					</button>
+					<Link to="/">
+						<button className="font-semibold text-slate-800 transit duration-500 hover:bg-gray-100 border-4 border-slate-800 p-2 ">
+							{" "}
+							CONTINUE SHIPPING
+						</button>
+					</Link>
 					<div className="space-x-2">
 						<span className="underline decoration-2">
-							Shopping Bag(2)
-						</span>
-						<span className="underline decoration-2">
-							Your Wishlist(0)
+							Shopping Bag({quantity})
 						</span>
 					</div>
 					<button className="font-semibold text-white bg-slate-900 py-3 px-3 ">
@@ -31,93 +40,86 @@ const Cart = () => {
 				</div>
 				<div className="flex">
 					<div className="p-2 w-full">
-						<div className=" border-b-2 flex gap-4">
-							<div className="w-28 flex justify-center items-center h-40">
-								<img
-									className="w-full object-cover"
-									src="./images/t-shirt.png"
-								/>
-							</div>
-							<div className="flex w-full justify-between">
-								<div className="flex space-y-3 flex-col justify-center">
-									<div>
-										<span className="font-semibold">Product:</span>
-										<span>JESSIE THUNDER SHOES</span>
-									</div>
-									<div>
-										<span className="font-semibold">ID:</span>
-										<span>91563248</span>
-									</div>
-									<span className="p-2 bg-black rounded-full w-fit"></span>
-									<div>
-										<span className="font-semibold">SIZE:</span>
-										<span>37.5</span>
-									</div>
+						{cart.products.map((product) => (
+							<div className=" border-b-2 flex gap-4">
+								<div className="w-28 flex justify-center items-center h-40">
+									<img
+										className="w-full object-cover"
+										src={product.img}
+										alt="product image"
+									/>
 								</div>
-								<div className="flex flex-col space-y-3 items-center justify-center">
-									<div className="flex items-center space-x-1">
-										<button className="text-2xl py-1 px-3 rounded-lg focus:border-slate-700 focus:border font-bold">
-											-
-										</button>
-										<span className="text-2xl flex items-center py-1 px-3   font-thin">
-											3
+								<div className="flex w-full justify-between">
+									<div className="flex space-y-1 flex-col justify-center">
+										<div>
+											<span className="font-semibold">Product:</span>
+											<span>{product.title}</span>
+										</div>
+										<div>
+											<span className=" font-medium">
+												Price for 1 Qut:
+											</span>
+											<span> $ {product.price}</span>
+										</div>
+										<div>
+											<span className="font-semibold">ID:</span>
+											<span>{product._id}</span>
+										</div>
+										<span
+											style={{ backgroundColor: product.color }}
+											className="p-2 border-2 border-gray-200 rounded-full w-fit"
+										></span>
+										<div>
+											<span className="font-semibold">SIZE:</span>
+											<span>{product.size}</span>
+										</div>
+									</div>
+									<div className="flex flex-col space-y-3 items-center justify-center">
+										<div className="flex items-center space-x-1">
+											<button
+												disabled={product.quantity < 2}
+												onClick={() =>
+													dispatch(decrementQuantity(product))
+												}
+												className="text-2xl py-1 px-3 rounded-lg  font-bold"
+											>
+												-
+											</button>
+											<span className="text-2xl flex items-center py-1 px-3   font-thin">
+												{product.quantity}
+											</span>
+											<button
+												onClick={() =>
+													dispatch(incrementQuantity(product))
+												}
+												className="text-2xl py-1 px-3 rounded-lg  font-bold"
+											>
+												+
+											</button>
+										</div>
+										<h2 className="text-4xl  font-thin">
+											{" "}
+											$ {product.price * product.quantity}
+										</h2>
+										<span
+											onClick={() => dispatch(remove(product))}
+											className="p-1 cursor-pointer text-xs  text-white rounded-md bg-rose-700"
+										>
+											Remove
 										</span>
-										<button className="text-2xl py-1 px-3 rounded-lg focus:border-slate-700 focus:border font-bold">
-											+
-										</button>
-									</div>
-									<h2 className="text-4xl  font-thin"> $ 20</h2>
-								</div>
-							</div>
-						</div>
-						<div className=" border-b-2 flex gap-4">
-							<div className="w-28 flex justify-center items-center h-40">
-								<img
-									className="w-full object-cover"
-									src="./images/pngShopingImg.png"
-								/>
-							</div>
-							<div className="flex w-full justify-between">
-								<div className="flex space-y-3 flex-col justify-center">
-									<div>
-										<span className="font-semibold">Product:</span>
-										<span>JESSIE THUNDER SHOES</span>
-									</div>
-									<div>
-										<span className="font-semibold">ID:</span>
-										<span>91563248</span>
-									</div>
-									<span className="p-2 bg-black rounded-full w-fit"></span>
-									<div>
-										<span className="font-semibold">SIZE:</span>
-										<span>37.5</span>
 									</div>
 								</div>
-								<div className="flex flex-col space-y-3 items-center justify-center">
-									<div className="flex items-center space-x-1">
-										<button className="text-2xl py-1 px-3 rounded-lg focus:border-slate-700 focus:border font-bold">
-											-
-										</button>
-										<span className="text-2xl flex items-center py-1 px-3   font-thin">
-											7
-										</span>
-										<button className="text-2xl py-1 px-3 rounded-lg focus:border-slate-700 focus:border font-bold">
-											+
-										</button>
-									</div>
-									<h2 className="text-4xl  font-thin"> $ 150</h2>
-								</div>
 							</div>
-						</div>
+						))}
 					</div>
-					<div className="p-2 border-2 m-2 w-1/3">
+					<div className="p-2  h-fit border-2 m-2 w-1/3">
 						<h1 className="mb-8 mt-2 text-2xl font-thin">
 							ORDER SUMMARY
 						</h1>
 						<div className="space-y-4 mb-6">
 							<div className="flex  justify-between">
 								<span>Subtotal</span>
-								<span>$ 80</span>
+								<span>$ {cart.total}</span>
 							</div>
 							<div className="flex  justify-between">
 								<span>Estimated Shipping</span>
@@ -129,12 +131,14 @@ const Cart = () => {
 							</div>
 							<div className="flex text-lg font-bold justify-between">
 								<span>Total</span>
-								<span>$ 80</span>
+								<span>$ {cart.total}</span>
 							</div>
 						</div>
-						<button className="py-2 w-full text-white bg-slate-900">
-							ORDER NOW
-						</button>
+						<Link to="#">
+							<button className="py-2 w-full text-white bg-slate-900">
+								ORDER NOW
+							</button>
+						</Link>
 					</div>
 				</div>
 			</div>

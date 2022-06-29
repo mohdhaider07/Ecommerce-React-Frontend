@@ -1,72 +1,125 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Announcements from "../components/Announcements";
 import NewsLetter from "../components/NewsLetter";
 import Footer from "../components/Footer";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../redux/cartRedux";
+import uniqid from "uniqid";
+import { toast } from "react-toastify";
 const Product = () => {
+	const location = useLocation();
+	const [qut, setQut] = useState(1);
+	const [color, setColor] = useState("");
+	const [size, setSize] = useState("");
+	const [product, setProduct] = useState();
+	// const [buttonDisable, setButtonDisable] = useState(true);
+	const id = location.pathname.split("/")[2];
+	const dispatch = useDispatch();
+	useEffect(() => {
+		id && getproduct();
+	}, [id]);
+	const getproduct = async () => {
+		try {
+			const { data } = await axios.get(
+				`http://localhost:5000/api/products/${id}`
+			);
+			// console.log(data);
+			setProduct(data);
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const handleClick = () => {
+		const id = uniqid.time();
+		dispatch(addProduct({ ...product, quantity: qut, color, size, id }));
+		toast.success("Added to cart");
+	};
+
 	return (
 		<div>
 			<Navbar />
 			<Announcements />
-			<div className="p-2 flex">
-				<div className="flex m-4 flex-1">
-					<img
-						className="w-full  object-cover "
-						src="../images/pngShopingImg.png"
-					/>
-				</div>
-				<div className=" m-4 flex-1">
-					<div>
-						<h1 className="text-3xl font-thin">Denim Jumpsuit</h1>
-						<p className="w-[80%] mb-4 tracking-wider">
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-							sed do eiusmod tempor incididunt ut labore et dolore magna
-							aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-							ullamco laboris nisi ut aliquip ex ea
-						</p>
-						<h2 className="text-4xl  font-thin"> $ 20</h2>
+			{product && (
+				<div className="p-2 flex">
+					<div className="flex m-4 flex-1">
+						<img className="w-full  object-contain " src={product.img} />
 					</div>
-					<div className="flex mt-8 items-center w-[55%]  justify-between">
-						<div className="flex items-center space-x-1">
-							<span className="text-2xl mr-2 font-thin">Color</span>
-							<span className="p-4  bg-red-500 rounded-full"></span>
-							<span className="p-4 bg-slate-500 rounded-full"></span>
-							<span className="p-4 bg-cyan-500 rounded-full"></span>
+					<div className=" m-4 flex-1">
+						<div>
+							<h1 className="text-3xl font-thin">{product.title}</h1>
+							<p className="w-[80%] mb-4 tracking-wider">
+								{product.dec}
+							</p>
+							<h2 className="text-4xl  font-thin"> $ {product.price}</h2>
 						</div>
-						<div className="flex justify-center items-center space-x-1">
-							<span className="text-2xl mr-2 font-thin">Size</span>
-							<select className="text-centre py-1 focus:outline-none focus:border-teal-400 px-2 border">
-								<option>XS</option>
-								<option>S</option>
-								<option>MD</option>
-								<option>L</option>
-								<option>XL</option>
-							</select>
+						<div className="flex mt-8 items-center w-80  justify-between">
+							<div className="flex items-center mr-4 space-x-1">
+								<span className="text-2xl mr-2 font-thin">Color</span>
+								{product.color.map((c) => (
+									<span
+										key={c}
+										onClick={() => setColor(c)}
+										style={{ backgroundColor: c }}
+										className={
+											color === c
+												? "p-4 cursor-pointer border-[2.8px] border-teal-500 rounded-full"
+												: "p-4 cursor-pointer border-2 border-gray-200 rounded-full"
+										}
+									></span>
+								))}
+							</div>
+							<div className="flex justify-center items-center space-x-1">
+								<span className="text-2xl mr-2 font-thin">Size</span>
+								<select
+									onChange={(e) => setSize(e.target.value)}
+									defaultValue="Size"
+									className="text-centre py-1 cursor-pointer focus:outline-none focus:border-teal-400 px-2 border"
+								>
+									<option disabled value="Size">
+										Size
+									</option>
+									{product.size.map((s) => (
+										<option key={s}>{s}</option>
+									))}
+								</select>
+							</div>
 						</div>
-					</div>
-					<div className=" mt-12 flex items-center w-[55%]  justify-between">
-						<div className="flex items-center space-x-1">
-							<button className="text-2xl py-1 px-3 rounded-lg focus:border-slate-700 focus:border font-bold">
-								-
-							</button>
-							<span className="text-2xl flex items-center py-1 px-3  border border-teal-400 rounded-lg mx-2 font-thin">
-								1
-							</span>
-							<button className="text-2xl py-1 px-3 rounded-lg focus:border-slate-700 focus:border font-bold">
-								+
-							</button>
-						</div>
-						<div className="flex justify-center items-center space-x-1">
-							<Link style={{ textDecoration: "none" }} to="/cart">
-								<button className="p-3 border-2 border-teal-400">
+						<div className=" mt-12 flex items-center w-80  justify-between">
+							<div className="flex items-center space-x-1">
+								<button
+									disabled={qut < 2}
+									onClick={() => setQut(qut - 1)}
+									className="text-xl py-1 px-3 font-bold"
+								>
+									-
+								</button>
+								<span className="text-xl flex items-center py-1 px-3  border border-teal-400 rounded-lg mx-2 font-thin">
+									{qut}
+								</span>
+								<button
+									onClick={() => setQut(qut + 1)}
+									className="text-xl py-1 px-3   font-bold"
+								>
+									+
+								</button>
+							</div>
+							<div className="flex justify-center items-center space-x-1">
+								<button
+									disabled={!color || !size}
+									onClick={handleClick}
+									className="p-3 border-2 text-black  border-teal-500"
+								>
 									ADD TO CARD
 								</button>
-							</Link>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			)}
 			<NewsLetter />
 			<Footer />
 		</div>

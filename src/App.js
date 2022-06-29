@@ -6,7 +6,12 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
 import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
+import Pay from "./pages/Pay";
+import { useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import VerifyEmail from "./pages/VerifyEmail";
 function App() {
+	const user = useSelector((state) => state.user.currentUser);
 	return (
 		<div className="App">
 			{/* <Home /> */}
@@ -25,6 +30,12 @@ function App() {
 					<Route path="/cart" element={<Cart />} />
 				</Routes>
 				<Routes>
+					<Route path="/pay" element={<Pay />} />
+				</Routes>
+				<Routes>
+					<Route path="/verify" element={<VerifyEmail />} />
+				</Routes>
+				<Routes>
 					<Route
 						path="/login"
 						element={user ? <Navigate to="/" /> : <Login />}
@@ -37,6 +48,7 @@ function App() {
 					/>
 				</Routes>
 			</BrowserRouter>
+			<ToastContainer />
 		</div>
 	);
 }
